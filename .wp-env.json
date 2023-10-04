@@ -1,0 +1,16 @@
+{
+	"core": null,
+	"phpVersion": "8.1",
+	"plugins": [
+		".",
+		"https://downloads.wordpress.org/plugin/advanced-custom-fields.6.2.1.zip"
+	],
+	"mappings": {
+		"database.sql": "./.wp-env/database.sql",
+		"database.php": "./.wp-env/database.php",
+		"wp-cli.yml": "./.wp-env/wp-cli.yml"
+	},
+	"lifecycleScripts": {
+		"afterStart": "wp-env run cli wp db import database.sql && wp-env run cli wp rewrite structure '/%postname%/' --hard && cd wp-content/plugins/wordpress-plugin-name && -d vendor || composer install"
+	}
+}

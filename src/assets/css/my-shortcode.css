@@ -1,0 +1,12 @@
+/**
+ * Styles for the shortcode content.
+ * Your use case may not require it.
+ */
+#my-shortcode .my-shortcode-counter {
+	font: 700 1.2em monospace;
+	text-decoration: underline;
+}
+
+#my-shortcode button {
+	display: block;
+}

@@ -1,0 +1,52 @@
+name: Lint using WordPress Coding Standards
+
+on:
+    pull_request:
+        types: [opened, synchronize, reopened]
+        paths:
+            - '**.php'
+            - '.github/workflows/lint_wpcs.yml'
+
+concurrency:
+    group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
+    cancel-in-progress: true
+
+jobs:
+    wpcs:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 2
+
+            - name: List changed files
+              run: |
+                  git diff --name-only -r HEAD^1 HEAD > changed_files.txt
+                  cat changed_files.txt
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '8.1'
+                  extensions: mbstring, zip
+
+            - name: Set up Composer
+              uses: ./.github/actions/setup-composer
+
+            - name: Create PHP CodeSniffer Summary
+              id: phpcs
+              run: vendor/bin/phpcs --report-file=phpcs_summary.txt --file-list=changed_files.txt --basepath=. --standard=.phpcs.xml.dist --report-width=120 --report=summary -q -w
+              continue-on-error: true
+
+            - name: Create PHP CodeSniffer Body
+              if: ${{ steps.phpcs.outputs.exit_code != 0 }}
+              run: vendor/bin/phpcs --report-file=phpcs_body.txt --file-list=changed_files.txt --standard=.phpcs.xml.dist --report-width=120 --report=code -q -w -s
+              continue-on-error: true
+
+            - name: Show PHP CodeSniffer Output
+              if: ${{ steps.phpcs.outputs.exit_code != 0 }}
+              run: |
+                  cat phpcs_summary.txt
+                  cat phpcs_body.txt

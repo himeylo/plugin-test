@@ -1,0 +1,230 @@
+{
+	"name": "wordpress-plugin-name",
+	"version": "1.0.0",
+	"private": true,
+	"description": "A template WordPress plugin.",
+	"author": "Texas A&M Transportation Institute, Communications Division",
+	"license": "GPL-2.0-or-later",
+	"keywords": [
+		"wordpress",
+		"wordpress-plugin"
+	],
+	"homepage": "https://github.com/ttitamu/com-wp-plugin-template#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ttitamu/com-wp-plugin-template.git"
+	},
+	"bugs": {
+		"url": "https://github.com/ttitamu/com-wp-plugin-template/issues"
+	},
+	"engines": {
+		"node": ">=18.16.1 <20.0.0",
+		"npm": ">=9.5.1"
+	},
+	"type": "module",
+	"main": "index.js",
+	"devDependencies": {
+		"@axe-core/playwright": "4.7.3",
+		"@babel/plugin-transform-modules-commonjs": "^7.22.15",
+		"@playwright/test": "1.36.1",
+		"@types/eslint": "8.44.0",
+		"@wordpress/browserslist-config": "5.20.0",
+		"@wordpress/env": "^8.2.0",
+		"@wordpress/eslint-plugin": "16.0.0",
+		"@wordpress/jest-preset-default": "11.8.0",
+		"@wordpress/prettier-config": "^2.19.0",
+		"@wordpress/scripts": "26.8.0",
+		"eslint-import-resolver-node": "0.3.7",
+		"eslint-plugin-eslint-comments": "3.2.0",
+		"eslint-plugin-import": "2.27.5",
+		"eslint-plugin-jest": "27.2.3",
+		"eslint-plugin-jest-dom": "5.0.1",
+		"eslint-plugin-playwright": "0.15.3",
+		"eslint-plugin-ssr-friendly": "1.2.0",
+		"eslint-plugin-testing-library": "6.0.1",
+		"husky": "^8.0.3",
+		"jest": "^29.6.0",
+		"lint-staged": "14.0.1",
+		"prettier": "npm:wp-prettier@^2.8.5",
+		"semver": "7.5.4"
+	},
+	"scripts": {
+		"template": "node .bin/template.js",
+		"prepare": "husky install .config/.husky",
+		"start": "wp-env start --scripts",
+		"start:debug": "wp-env start --scripts --xdebug=profile,trace,debug",
+		"start:update": "wp-env start --scripts --update",
+		"stop": "wp-env stop",
+		"clean": "wp-env clean all && wp-env start --scripts",
+		"destroy": "wp-env destroy",
+		"lint": "npm run lint:js && npm run lint:css",
+		"lint:css": "wp-scripts lint-style src/assets/css --ignore-path=.config/.prettierignore",
+		"lint:js": "wp-scripts lint-js src/assets/js --ignore-path=.config/.prettierignore",
+		"lint:php": "wp-env run --env-cwd=wp-content/plugins/wordpress-plugin-name wordpress composer run lint",
+		"format:css": "wp-scripts lint-style src/assets/css --fix --ignore-path=.config/.prettierignore",
+		"format:js": "wp-scripts lint-js src/assets/js --fix --ignore-path=.config/.prettierignore",
+		"format:php": "wp-env run --env-cwd=wp-content/plugins/wordpress-plugin-name wordpress ./vendor/bin/phpcbf --standard=.config/.phpcs.xml.dist --report-summary",
+		"prettier": "prettier --check --config .config/.prettierrc.json --ignore-path .config/.prettierignore .",
+		"logs": "wp-env logs",
+		"test": "npm run test:e2e && npm run test:php",
+		"test:e2e": "playwright test --project=\"Google Chrome\" --config test/e2e/playwright.config.js",
+		"test:e2e:ui": "playwright test --ui --project=\"Google Chrome\" --config test/e2e/playwright.config.js",
+		"test:js": "jest --roots src/assets/js test/jest --config=test/jest/jest.config.js",
+		"test:php": "wp-env run tests-cli 'bash -c \"cd wp-content/plugins/wordpress-plugin-name && vendor/bin/phpunit\"'",
+		"wp": "wp-env run cli wp",
+		"db:query": "wp-env run cli wp db query",
+		"db:seed-php": "wp-env run cli wp eval-file database.php",
+		"db:seed-sql": "wp-env run cli wp db import database.sql",
+		"composer": "wp-env run --env-cwd=wp-content/plugins/wordpress-plugin-name wordpress composer",
+		"wp-env": "wp-env",
+		"wp-scripts": "wp-scripts"
+	},
+	"lint-staged": {
+		"assets/**/*.{js,json,ts,tsx,yml,yaml}": [
+			"wp-scripts format"
+		],
+		"assets/**/*.{js,ts,tsx}": [
+			"npm run format:js"
+		],
+		"assets/**/*.{css,scss}": [
+			"npm run format:css"
+		],
+		"*.php": [
+			"echo '' && wp-env run --env-cwd=wp-content/plugins/wordpress-plugin-name wordpress ./vendor/bin/phpcbf --standard=.config/.phpcs.xml.dist --report-summary --filter=gitstaged"
+		]
+	},
+	"browserslist": [
+		"extends @wordpress/browserslist-config"
+	],
+	"babel": {
+		"env": {
+			"test": {
+				"plugins": [
+					"@babel/plugin-transform-modules-commonjs"
+				]
+			}
+		}
+	},
+	"eslintConfig": {
+		"root": true,
+		"env": {
+			"browser": true
+		},
+		"ignorePatterns": [
+			"build",
+			"node_modules",
+			"vendor"
+		],
+		"extends": [
+			"plugin:@wordpress/eslint-plugin/recommended",
+			"plugin:eslint-comments/recommended"
+		],
+		"globals": {
+			"wp": "off"
+		},
+		"settings": {
+			"jsdoc": {
+				"mode": "typescript"
+			},
+			"import/internal-regex": null
+		},
+		"rules": {
+			"jest/expect-expect": "off",
+			"@wordpress/dependency-group": "error",
+			"@wordpress/is-gutenberg-plugin": "error",
+			"@wordpress/react-no-unsafe-timeout": "error",
+			"@wordpress/i18n-text-domain": [
+				"error",
+				{
+					"allowedTextDomain": "default"
+				}
+			],
+			"@wordpress/no-unsafe-wp-apis": "off",
+			"@wordpress/data-no-store-string-literals": "error",
+			"import/default": "error",
+			"import/named": "error",
+			"no-restricted-syntax": [
+				"error",
+				{
+					"selector": "LogicalExpression[operator='&&'][left.property.name='length'][right.type='JSXElement']",
+					"message": "Avoid truthy checks on length property rendering, as zero length is rendered verbatim."
+				}
+			]
+		},
+		"overrides": [
+			{
+				"files": [
+					"**/@(__mocks__|__tests__|test)/**/*.[tj]s?(x)"
+				],
+				"rules": {
+					"import/default": "off",
+					"import/no-extraneous-dependencies": "off",
+					"import/no-unresolved": "off",
+					"import/named": "off",
+					"@wordpress/data-no-store-string-literals": "off"
+				}
+			},
+			{
+				"files": [
+					"**/test/**/*.js"
+				],
+				"excludedFiles": [
+					"test/e2e/**/*.js"
+				],
+				"extends": [
+					"plugin:@wordpress/eslint-plugin/test-unit"
+				]
+			},
+			{
+				"files": [
+					"**/test/**/*.[tj]s?(x)"
+				],
+				"excludedFiles": [
+					"test/e2e/**/*.[tj]s?(x)"
+				],
+				"extends": [
+					"plugin:jest-dom/recommended",
+					"plugin:testing-library/react",
+					"plugin:jest/recommended"
+				]
+			},
+			{
+				"files": [
+					"test/e2e/**/*.[tj]s"
+				],
+				"extends": [
+					"plugin:eslint-plugin-playwright/playwright-test"
+				],
+				"rules": {
+					"@wordpress/no-global-active-element": "off",
+					"@wordpress/no-global-get-selection": "off",
+					"playwright/no-page-pause": "error",
+					"no-restricted-syntax": [
+						"error",
+						{
+							"selector": "CallExpression[callee.property.name='$']",
+							"message": "`$` is discouraged, please use `locator` instead"
+						},
+						{
+							"selector": "CallExpression[callee.property.name='$$']",
+							"message": "`$$` is discouraged, please use `locator` instead"
+						},
+						{
+							"selector": "CallExpression[callee.object.name='page'][callee.property.name='waitForTimeout']",
+							"message": "Prefer page.locator instead."
+						}
+					]
+				}
+			},
+			{
+				"files": [
+					".bin/**/*.js",
+					".bin/**/*.mjs"
+				],
+				"rules": {
+					"no-console": "off"
+				}
+			}
+		]
+	}
+}

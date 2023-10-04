@@ -1,0 +1,20 @@
+/**
+ * Styles for the custom post type's single post page.
+ * Your use case may not require it.
+ */
+.single-new_post_type .title {
+	font-weight: 700;
+}
+
+.single-new_post_type table.fields {
+	border-collapse: collapse;
+}
+
+.single-new_post_type table.fields td {
+	padding: 1rem;
+	border: 1px solid #000;
+}
+
+.single-new_post_type table.fields thead td {
+	line-height: 1;
+}

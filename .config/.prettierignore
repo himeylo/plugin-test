@@ -1,0 +1,9 @@
+.cache
+node_modules
+vendor
+wordpress
+package-lock.json
+pnpm-lock.yaml
+composer.lock
+LICENSE
+*.html

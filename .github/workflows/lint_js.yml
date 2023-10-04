@@ -1,0 +1,32 @@
+name: Lint JavaScript Files
+
+on:
+    workflow_dispatch:
+    pull_request:
+        types: [opened, synchronize, reopened]
+        paths:
+            - '**.js'
+            - '**.json'
+            - '**.mjs'
+            - '**.cjs'
+            - '**.ts'
+            - '**.tsx'
+            - .github/workflows/lint_js.yml
+
+concurrency:
+    group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
+    cancel-in-progress: true
+
+jobs:
+    lint-prettier:
+        permissions:
+            contents: read
+        runs-on: 'ubuntu-latest'
+        steps:
+            - uses: actions/checkout@v4
+            - uses: ./.github/actions/setup-node
+
+            - name: Run linter
+              run: |
+                  npm run prettier
+                  npm run lint:js

@@ -1,0 +1,39 @@
+/**
+ * Styles loaded by the plugin's Assets class.
+ * Your use case may not require it.
+ */
+#wordpress-plugin-name {
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	z-index: 999999;
+	background: rgba(0, 0, 0, 0.5);
+	text-align: center;
+}
+
+#wordpress-plugin-name .wordpress-plugin-name-message {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	color: #fff;
+	background-color: #000;
+	padding: 2rem;
+	box-shadow: 0 0 10px #000;
+	text-shadow: 0 0 5px #000;
+	font: 700 2rem sans-serif;
+}
+
+#wordpress-plugin-name .wordpress-plugin-name-file-list {
+	font: 700 1.5rem monospace;
+	text-align: left;
+	white-space: nowrap;
+	margin-top: 2rem;
+}
+
+#wordpress-plugin-name .wordpress-plugin-name-file-list ol {
+	margin-top: 0;
+	margin-bottom: 0;
+}

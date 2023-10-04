@@ -1,0 +1,59 @@
+{
+	"name": "ttitamu/wordpress-plugin-name",
+	"description": "A template WordPress plugin.",
+	"type": "project",
+	"scripts": {
+		"test": [
+			"@putenv WP_SQLITE_MODE=enabled",
+			"./vendor/bin/phpunit -c .config/phpunit.xml.dist"
+		],
+		"lint": "./vendor/bin/phpcs --standard=.config/.phpcs.xml.dist --report-full --report-summary",
+		"format": "./vendor/bin/phpcbf --standard=.config/.phpcs.xml.dist --report-summary",
+		"lint:errors": "./vendor/bin/phpcs -n"
+	},
+	"license": "GPL-2.0+",
+	"autoload": {
+		"classmap": [
+			"common/",
+			"src/"
+		]
+	},
+	"authors": [
+		{
+			"name": "Texas A&M Transportation Institute, Communications Division",
+			"email": "webmaster@tti.tamu.edu"
+		}
+	],
+	"config": {
+		"platform": {
+			"php": "8.1"
+		},
+		"optimize-autoloader": true,
+		"preferred-install": "dist",
+		"sort-packages": true,
+		"bin-compat": "full",
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true,
+			"roots/wordpress-core-installer": true,
+			"composer/installers": true
+		}
+	},
+	"require-dev": {
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+		"phpunit/phpunit": "^9.6",
+		"roots/wordpress": "^6.2",
+		"squizlabs/php_codesniffer": "^3.7",
+		"wordpress/sqlite-database-integration": "^2.1",
+		"wp-coding-standards/wpcs": "dev-develop",
+		"wp-phpunit/wp-phpunit": "^6.2",
+		"yoast/phpunit-polyfills": "^2.0"
+	},
+	"repositories": [
+		{
+			"url": "https://github.com/wordpress/sqlite-database-integration.git",
+			"type": "git"
+		}
+	],
+	"minimum-stability": "stable",
+	"prefer-stable": true
+}
