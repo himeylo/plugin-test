@@ -29,7 +29,7 @@
 		"@playwright/test": "1.36.1",
 		"@types/eslint": "8.44.0",
 		"@wordpress/browserslist-config": "5.20.0",
-		"@wordpress/env": "^8.2.0",
+		"@wordpress/env": "^9.0.0",
 		"@wordpress/eslint-plugin": "16.0.0",
 		"@wordpress/jest-preset-default": "11.8.0",
 		"@wordpress/prettier-config": "^2.19.0",
